@@ -229,9 +229,10 @@ def generate_video
     return false
   end
 
-  # Create the video directly from the original images without transitions or blur
-  puts "Creating video from images..."
+  # Create the video with motion compensated interpolation for smoother transitions
+  puts "Creating video from images with motion compensated interpolation..."
   final_cmd = "ffmpeg -y -framerate 30 -pattern_type glob -i \"#{IMAGES_DIR}/streetview_*.jpg\" " \
+              "-vf \"minterpolate=mi_mode=mci:mc_mode=aobmc:me_mode=bidir:me=epzs:vsbmc=1\" " \
               "-c:v libx264 -pix_fmt yuv420p -crf 18 hyperlapse.mp4"
 
   if system(final_cmd)
